@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "446643918761",
+    "project_id": "granddesiparatha-967b5",
+    "storage_bucket": "granddesiparatha-967b5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:446643918761:android:b91b2d024c7abd63f6d6b8",
+        "android_client_info": {
+          "package_name": "com.example.pharataorder"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDbtXMwZsU4joa5GuuOPkudoIFM3fGGYHs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:446643918761:android:49df1f6600081217f6d6b8",
+        "android_client_info": {
+          "package_name": "com.example.untitled2"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDbtXMwZsU4joa5GuuOPkudoIFM3fGGYHs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
