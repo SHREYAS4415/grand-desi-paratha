@@ -1,17 +1,22 @@
+import 'dart:io';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_stripe/flutter_stripe.dart';
 
 import 'package:untitled2/pages/siginup.dart';
+import 'package:untitled2/pages/wallet.dart';
+import 'package:untitled2/payment_gatway/razorpay.dart';
 import 'package:untitled2/widget/app_constant.dart';
 
 
 import 'firebase_options.dart';
 import 'foodcategory/pharata.dart';
+import 'package:http/http.dart' as http;
 
 Future<void> main() async{
-  Stripe.publishableKey=publishablekey;
-  WidgetsFlutterBinding.ensureInitialized();
+  // Stripe.publishableKey=publishablekey;
+  HttpOverrides.global = MyHttpOverrides();
+   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -27,7 +32,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home:SignUp(),
+      // home:SignUp(),
+      home: WalletPage(),
     );
   }
 }

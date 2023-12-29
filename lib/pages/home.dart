@@ -1,403 +1,146 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'order.dart';
 
-import '../foodcategory/pharata.dart';
-import '../widget/widget_support.dart';
-import 'details.dart';
+class MenuItem {
+  final String name;
+  final String image;
 
-class Home extends StatefulWidget {
-  const Home({super.key});
-
-  @override
-  State<Home> createState() => _HomeState();
+  MenuItem({required this.name, required this.image});
 }
 
-class _HomeState extends State<Home> {
-  bool pharata = false, curry = false, tandoor = false;
+class MenuPage extends StatefulWidget {
+  @override
+  _MenuPageState createState() => _MenuPageState();
+}
+
+class _MenuPageState extends State<MenuPage> {
+  Map<String, List<MenuItem>> menuItems = {
+    'Breakfast': [
+      MenuItem(name: 'Idly 2pcs', image: 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/MPRzocJOpYyWy_Idly2Pcs.jpg'),
+      MenuItem(name: 'Vada', image: 'https://farm1.staticflickr.com/320/18912568232_686613c78c_o.jpg'),
+      MenuItem(name: 'Kharabath', image: 'https://thephotowali.files.wordpress.com/2019/08/img201908161053451336713087275706865.jpg'),
+      MenuItem(name: 'Kesaribath', image: 'https://www.ticklingpalates.com/wp-content/uploads/2022/09/rava-kesari-recipe.jpg'),
+      MenuItem(name: 'Rice Bath', image: 'https://smithakalluraya.com/wp-content/uploads/2014/10/image.1024x1024-43.jpg'),
+      MenuItem(name: 'Any Dosa\'s', image: 'https://www.indianhealthyrecipes.com/wp-content/uploads/2023/06/brown-rice-dosa-recipe.jpg'),
+      MenuItem(name: 'Stuffed Parathas', image: 'https://simmertoslimmer.com/wp-content/uploads/2022/11/Onion-paratha.jpg'),
+      MenuItem(name: 'Chapathi/Phulkha', image: 'https://www.krumpli.co.uk/wp-content/uploads/2023/05/Homemade-Indian-Chapati-02-735x735.jpg'),
+      MenuItem(name: 'Plain Parathas', image: 'https://indianvegrecipe.com/wp-content/uploads/2019/10/paratha-recipe-2.jpg'),
+      MenuItem(name: 'gravy\'s', image: 'https://i.ytimg.com/vi/uCDcZMygqdg/maxresdefault.jpg'),
+    ],
+    'Lunch': [
+      MenuItem(name: 'Rice', image: 'https://www.vegrecipesofindia.com/wp-content/uploads/2022/06/how-to-cook-basmati-rice-2.jpg'),
+      MenuItem(name: 'Sambar', image: 'https://www.cubesnjuliennes.com/wp-content/uploads/2021/01/South-Indian-Sambar-Recipe.jpg'),
+      MenuItem(name: 'Rasam', image: 'https://www.myhealthybreakfast.in/images/images-drink-2022/chana-rasam.jpg'),
+      MenuItem(name: 'Vegetable Curry', image: 'https://greenbowl2soul.com/wp-content/uploads/2021/06/Indian-vegetable-curry.jpg'),
+      MenuItem(name: 'Rice Bath', image: 'https://smithakalluraya.com/wp-content/uploads/2014/10/image.1024x1024-43.jpg'),
+      MenuItem(name: 'CurdRice', image: 'https://www.vegrecipesofindia.com/wp-content/uploads/2016/07/curd-rice-2-500x500.jpg'),
+      MenuItem(name: 'Stuffed Parathas', image: 'https://simmertoslimmer.com/wp-content/uploads/2022/11/Onion-paratha.jpg'),
+      MenuItem(name: 'Chapathi/Phulkha', image: 'https://www.krumpli.co.uk/wp-content/uploads/2023/05/Homemade-Indian-Chapati-02-735x735.jpg'),
+      MenuItem(name: 'Plain Parathas', image: 'https://indianvegrecipe.com/wp-content/uploads/2019/10/paratha-recipe-2.jpg'),
+      MenuItem(name: 'Indian gravy\'s', image: 'https://i.ytimg.com/vi/uCDcZMygqdg/maxresdefault.jpg'),
+    ],
+    'Dinner': [
+      MenuItem(name: 'phulkha(3pcs) with curry', image: 'https://as2.ftcdn.net/v2/jpg/01/15/45/43/1000_F_115454319_6SlLY58SwqRdx4o8vqvTHA9nTJ5l6ss2.jpg'),
+      MenuItem(name: 'Any RiceBath', image: 'https://smithakalluraya.com/wp-content/uploads/2014/10/image.1024x1024-43.jpg'),
+      MenuItem(name: 'Pizza Parathas', image: 'https://i.ytimg.com/vi/-JKtWOqARa4/maxresdefault.jpg'),
+      MenuItem(name: 'Stuffed Parathas', image: 'https://simmertoslimmer.com/wp-content/uploads/2022/11/Onion-paratha.jpg'),
+      MenuItem(name: 'Chapathi(3pcs) with Curry', image: 'https://www.shutterstock.com/image-photo/vegetarian-indian-thali-home-food-600nw-1939889272.jpg'),
+      MenuItem(name: 'Indian Tacos', image: 'https://keviniscooking.com/wp-content/uploads/2022/08/Navajo-Tacos-Indian-Fry-Bread-square-1000x1000.jpg'),
+      MenuItem(name: 'Indian gravy\'s', image: 'https://i.ytimg.com/vi/uCDcZMygqdg/maxresdefault.jpg'),
+    ],
+  };
+
+  String currentMenu = '';
+
+  List<MenuItem> cartItems = [];
+
+  @override
+  void initState() {
+    super.initState();
+    currentMenu = getMenuBasedOnTime();
+  }
+
+  String getMenuBasedOnTime() {
+    var currentTime = DateTime.now().hour;
+    if (currentTime >= 5 && currentTime < 12) {
+      return 'Breakfast';
+    } else if (currentTime >= 12 && currentTime < 17) {
+      return 'Lunch';
+    } else {
+      return 'Dinner';
+    }
+  }
+
+  void addToCart(MenuItem item) {
+    setState(() {
+      cartItems.add(item);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Container(
-            margin: EdgeInsets.only(
-              top: 50.0,
-              left: 10.0,
-            ),
+    List<MenuItem> items = menuItems[currentMenu] ?? [];
+
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Today\'s Menu'),
+          backgroundColor: Colors.orange,
+        ),
+        body: SingleChildScrollView(
+          child: Center(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Hello Shrays,',
-                      style: AppWidget.boldTextFieldStyle(),
+                Text(
+                  'Available menu for $currentMenu:',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 20),
+                Column(
+                  children: items
+                      .map((item) => ListTile(
+                    leading: CircleAvatar(
+                      backgroundImage: NetworkImage(item.image),
                     ),
-                    Container(
-                      margin: EdgeInsets.only(right: 20.0),
-                      padding: EdgeInsets.all(3),
-                      decoration: BoxDecoration(color: Colors.black),
-                      child: Icon(
-                        Icons.shopping_cart,
-                        color: Colors.white,
-                      ),
-                    )
-                  ],
-                ),
-                SizedBox(
-                  height: 20.0,
-                ),
-                Text('Delicious food is ready,',
-                    style: AppWidget.HeadLineTextFieldStyle()),
-                Text('Discover and Get Great Food,',
-                    style: AppWidget.LightTextFieldStyle()),
-                SizedBox(
-                  height: 20,
-                ),
-                Container(
-                    margin: EdgeInsets.only(right: 40.0), child: showItem()),
-                SizedBox(
-                  height: 20.0,
-                ),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      GestureDetector(
-                        onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context)=>Details()));},
-                        child: Container(
-                          margin: EdgeInsets.all(4),
-                          child: Material(
-                            elevation: 10.0,
-                            borderRadius: BorderRadius.circular(20),
-                            child: Container(
-                              padding: EdgeInsets.all(14),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Image(
-                                      image: AssetImage('images/salad.png'),
-                                      width: 150.0,
-                                      height: 150.0,
-                                      fit: BoxFit.cover),
-                                  Text(
-                                    'Idly',
-                                    style: AppWidget.HeadLineTextFieldStyle(),
-                                  ),
-                                  SizedBox(
-                                    height: 5.0,
-                                  ),
-                                  Text(
-                                    'Fresh And Healdy',
-                                    style: AppWidget.semiBoldTextFieldStyle(),
-                                  ),
-                                  SizedBox(
-                                    height: 5.0,
-                                  ),
-                                  Text(
-                                    'Rs.200',
-                                    style: AppWidget.HeadLineTextFieldStyle(),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 15.0,
-                      ),
-                      Container(
-                        margin: EdgeInsets.all(4),
-                        child: Material(
-                          elevation: 10.0,
-                          borderRadius: BorderRadius.circular(20),
-                          child: Container(
-                            padding: EdgeInsets.all(14),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Image(
-                                    image: AssetImage('images/salad.png'),
-                                    width: 150.0,
-                                    height: 150.0,
-                                    fit: BoxFit.cover),
-                                Text(
-                                  'Salad',
-                                  style: AppWidget.HeadLineTextFieldStyle(),
-                                ),
-                                SizedBox(
-                                  height: 5.0,
-                                ),
-                                Text(
-                                  'Fresh And Healdy',
-                                  style: AppWidget.semiBoldTextFieldStyle(),
-                                ),
-                                SizedBox(
-                                  height: 5.0,
-                                ),
-                                Text(
-                                  'Rs.200',
-                                  style: AppWidget.HeadLineTextFieldStyle(),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 15.0,
-                      ),
-                      Container(
-                        margin: EdgeInsets.all(4),
-                        child: Material(
-                          elevation: 10.0,
-                          borderRadius: BorderRadius.circular(20),
-                          child: Container(
-                            padding: EdgeInsets.all(14),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Image(
-                                    image: AssetImage('images/salad.png'),
-                                    width: 150.0,
-                                    height: 150.0,
-                                    fit: BoxFit.cover),
-                                Text(
-                                  'Salad',
-                                  style: AppWidget.HeadLineTextFieldStyle(),
-                                ),
-                                SizedBox(
-                                  height: 5.0,
-                                ),
-                                Text(
-                                  'Fresh And Healdy',
-                                  style: AppWidget.semiBoldTextFieldStyle(),
-                                ),
-                                SizedBox(
-                                  height: 5.0,
-                                ),
-                                Text(
-                                  'Rs.200',
-                                  style: AppWidget.HeadLineTextFieldStyle(),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Container(
-                  margin: EdgeInsets.only(right: 20.0),
-                  child: Material(
-                    elevation: 5.0,
-                    borderRadius: BorderRadius.circular(20),
-                    child: Container(
-                      padding: EdgeInsets.all(5),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            height: 30.0,
-                          ),
-                          Image(
-                            image: AssetImage('images/salad.png'),
-                            height: 120,
-                            width: 120,
-                            fit: BoxFit.cover,
-                          ),
-                          SizedBox(
-                            width: 20.0,
-                          ),
-                          Column(
-                            children: [
-                              Container(
-                                  width: MediaQuery.of(context).size.width / 2,
-                                  child: Text(
-                                    'Madeterrian ChickPea Salad',
-                                    style: AppWidget.HeadLineTextFieldStyle(),
-                                  )),
-                              SizedBox(
-                                height: 5.0,
-                              ),
-                              Container(
-                                  width: MediaQuery.of(context).size.width / 2,
-                                  child: Text(
-                                    'Honey Goat Cheese',
-                                    style: AppWidget.semiBoldTextFieldStyle(),
-                                  )),
-                              SizedBox(
-                                height: 5.0,
-                              ),
-                              Container(
-                                  width: MediaQuery.of(context).size.width / 2,
-                                  child: Text(
-                                    'Rs.200 ',
-                                    style: AppWidget.HeadLineTextFieldStyle(),
-                                  )),
-                            ],
-                          ),
-                        ],
-                      ),
+                    title: Text(
+                      item.name,
+                      style: TextStyle(fontSize: 18),
                     ),
-                  ),
-                ),
-                SizedBox(height: 20,),
-                Container(
-                  margin: EdgeInsets.only(right: 20.0),
-                  child: Material(
-                    elevation: 5.0,
-                    borderRadius: BorderRadius.circular(20),
-                    child: Container(
-                      padding: EdgeInsets.all(5),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            height: 30.0,
+                    trailing: IconButton(
+                      icon: Icon(Icons.add),
+                      onPressed: () {
+                        addToCart(item);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('${item.name} added to cart'),
+                            duration: Duration(seconds: 1),
                           ),
-                          Image(
-                            image: AssetImage('images/salad.png'),
-                            height: 120,
-                            width: 120,
-                            fit: BoxFit.cover,
-                          ),
-                          SizedBox(
-                            width: 20.0,
-                          ),
-                          Column(
-                            children: [
-                              Container(
-                                  width: MediaQuery.of(context).size.width / 2,
-                                  child: Text(
-                                    'Madeterrian ChickPea Salad',
-                                    style: AppWidget.HeadLineTextFieldStyle(),
-                                  )),
-                              SizedBox(
-                                height: 5.0,
-                              ),
-                              Container(
-                                  width: MediaQuery.of(context).size.width / 2,
-                                  child: Text(
-                                    'Honey Goat Cheese',
-                                    style: AppWidget.semiBoldTextFieldStyle(),
-                                  )),
-                              SizedBox(
-                                height: 5.0,
-                              ),
-                              Container(
-                                  width: MediaQuery.of(context).size.width / 2,
-                                  child: Text(
-                                    'Rs.200 ',
-                                    style: AppWidget.HeadLineTextFieldStyle(),
-                                  )),
-                            ],
-                          ),
-                        ],
-                      ),
+                        );
+                      },
                     ),
-                  ),
+                  ))
+                      .toList(),
                 ),
               ],
             ),
           ),
         ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => CartPage(cartItems: cartItems),
+              ),
+            );
+
+          },
+          child: Icon(Icons.shopping_cart),
+        ),
       ),
-    );
-  }
-
-  Widget showItem() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        SizedBox(
-          width: 30,
-        ),
-        GestureDetector(
-          onTap: () {
-            pharata = true;
-            curry = false;
-            tandoor = false;
-            setState(() {});
-          },
-          child: Material(
-            elevation: 5.0,
-            child: Container(
-              decoration:
-                  BoxDecoration(color: pharata ? Colors.black : Colors.white),
-              padding: EdgeInsets.all(10),
-              child: Image.asset(
-                'images/pharata2.jpg',
-                height: 50.0,
-                width: 40.0,
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-        ),
-        SizedBox(
-          width: 30,
-        ),
-        GestureDetector(
-          onTap: () {
-            pharata = false;
-            curry = true;
-            tandoor = false;
-
-            setState(() {});
-          },
-          child: Material(
-            elevation: 5.0,
-            child: Container(
-              decoration:
-                  BoxDecoration(color: curry ? Colors.black : Colors.white),
-              padding: EdgeInsets.all(10),
-              child: Image.asset(
-                'images/gravy.jpg',
-                height: 50.0,
-                width: 40.0,
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-        ),
-        SizedBox(
-          width: 30,
-        ),
-        GestureDetector(
-          onTap: () {
-            pharata = false;
-            curry = false;
-            tandoor = true;
-
-            setState(() {});
-          },
-          child: Material(
-            elevation: 5.0,
-            child: Container(
-              decoration:
-                  BoxDecoration(color: tandoor ? Colors.black : Colors.white),
-              padding: EdgeInsets.all(10),
-              child: Image.asset(
-                'images/tandoor.png',
-                height: 50.0,
-                width: 40.0,
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-        ),
-        SizedBox(
-          width: 30,
-        ),
-      ],
     );
   }
 }
